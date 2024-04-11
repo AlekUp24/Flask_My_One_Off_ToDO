@@ -35,8 +35,6 @@ def add_task():
 
     return redirect(url_for('index'))
 
- 
-
 @app.route('/update/<int:task_id>')
 def update(task_id):
     to_update = ToDo.query.get(task_id)
@@ -46,8 +44,6 @@ def update(task_id):
 
     return redirect(url_for('index'))
 
- 
-
 @app.route('/delete/<int:task_id>')
 def delete(task_id):
     to_delete = ToDo.query.get(task_id)
@@ -56,8 +52,6 @@ def delete(task_id):
     db.session.commit()
  
     return redirect(url_for('index'))
-
- 
 
 if __name__ == "__main__":
     with app.app_context():
