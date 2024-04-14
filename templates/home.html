@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+<h1 class="display-3"> To Do App (One Off) </h1><br>
+
+    <form action="/add" method="post">
+        <div class="container">
+            <h2><label class="font-weight-bold" for="title">Add New Task</label></h2>
+            <input class="form-control" type="text" name="title" placeholder="Title..."><br>
+            <input class="form-control" type="text" name="description" placeholder="Desctiption..."><br>
+            <div class="d-flex justify-content-between">
+                <input class="d-inline form-control" style="width: 200px;" type="date" name="due_date">
+                <button class="d-inline btn btn-primary mb-2" style="width: 200px;" type="submit">Add</button> 
+            </div>
+        </div>
+    </form>
+
+    <br><br><br>
+
+    {% for task in user.todos %}
+        <div class="container border border-dark">
+            <br>
+            <h4>{{task.id}} | {{task.title}}</h4>
+            <p class="blockquote">{{task.description}}<p>
+
+            {% if task.due_date < now %}
+                <span class="btn btn-warning">{{task.due_date}}</span>
+            {% else %}
+                <span class="btn btn-info">{{task.due_date}}</span>
+            {% endif %}
+
+            {% if task.completed == False %}
+                <span class="lead" style="margin-left: 20px;">Not Completed</span>
+            {% else %}
+                <span class="lead" style="margin-left: 20px; color: #4eb314;">Completed</span>
+            {% endif %}
+
+            <br><br>
+
+            <a class="btn btn-success" style="width: 120px;" href="/update/{{task.id}}">Update</a>
+            <a class="btn btn-danger" style="width: 120px;" href="/delete/{{task.id}}">Delete</a>  
+
+        </div>
+        <br>
+
+    {% endfor %}
+
+{% endblock %}
+</body>
+</html>

@@ -4,52 +4,59 @@
     <meta charset='utf-8'>
     <title>ToDo One Off</title>
     <link rel='stylesheet' type='text/css' href='/css/bootstrap.css'> 
+
+    <title>{% block title %}Home{% endblock %}</title>
+
 </head>
 
 <body>
-<h1 class="display-3"> To Do App (One Off) </h1><br>
- 
-    <form action="/add" method="post">
-        <div class="container">
-            <h2><label class="font-weight-bold" for="title">Add New Task</label></h2>
-            <input class="form-control" type="text" name="title" placeholder="Title..."><br>
-            <input class="form-control" type="text" name="description" placeholder="Desctiption..."><br>
-            <div class="d-flex justify-content-between">
-                <input class="d-inline form-control" style="width: 200px;" type="date" name="due_date">
-                <button class="d-inline btn btn-primary mb-2" style="width: 200px;" type="submit">Add</button> 
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="'navbar">
+        <div class="navbar-nav">
+            {% if user.is_authenticated %}
+            <button class="btn btn-outline-light" style="padding: 0 20px; margin: 0 20px;"id="user_name">{{user.user_name}}</button>
+            <a class="nav-item nav-link" id="home" href="/">Home</a>
+            <a class="nav-item nav-link" id="logout" href="/logout">Logout</a>
+
+            {% else %}
+            <a class="nav-item nav-link" id="login" href="/login">Login</a>
+            <a class="nav-item nav-link" id="signUp" href="/signup">Sign Up</a>
+            {% endif %}
+            
+        </div>
+    </div>
+</nav>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+    {% for category, message in messages %}
+        {% if category == 'error' %}
+            <div class="alert alert-danger alert-dismissable fade show" role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-        </div>
-    </form>
-
-    <br><br><br>
-
-    {% for task in todo_list %}
-        <div class="container border border-dark">
-            <br>
-            <h4>{{task.id}} | {{task.title}}</h4>
-            <p class="blockquote">{{task.description}}<p>
-
-            {% if task.due_date < now %}
-                <span class="btn btn-warning">{{task.due_date}}</span>
-            {% else %}
-                <span class="btn btn-info">{{task.due_date}}</span>
-            {% endif %}
-
-            {% if task.completed == False %}
-                <span class="lead" style="margin-left: 20px;">Not Completed</span>
-            {% else %}
-                <span class="lead" style="margin-left: 20px; color: #4eb314;">Completed</span>
-            {% endif %}
-
-            <br><br>
-
-            <a class="btn btn-success" style="width: 120px;" href="/update/{{task.id}}">Update</a>
-            <a class="btn btn-danger" style="width: 120px;" href="/delete/{{task.id}}">Delete</a>  
-
-        </div>
-        <br>
-
+        {% else %}
+            <div class="alert alert-success alert-dismissable fade show" role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endif %}
     {% endfor %}
+{% endif %}
+{% endwith%}
+
+<div class="container">
+{% block content %}
+{% endblock %}
+</div>
 
 </body>
 </html>
